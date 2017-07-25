@@ -153,3 +153,8 @@ feature map의 크기는 32x32가 된다. 이렇게 zero-padding을 지원하면
 
 그럼 zero-padding을 하는 이유는 무엇일까?   
 단순하게 영상의 크기를 동일하게 유지하는 장점 이외에도, 경계면의 정보까지 살릴 수가 있어 zero-padding을 지원하지 않는 경우에 비해 zero-padding을 지원하는 것이 좀 더 결과가 좋다.
+
+---
+
+<h2>Refernece </h2>  
+[라온피플 블로그](http://laonple.blog.me/220643128255)
