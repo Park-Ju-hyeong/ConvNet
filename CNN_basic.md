@@ -1,6 +1,28 @@
-# Convolutaion Neural Networks
+ Convolutaion Neural Networks
+===================================
+> 2017.07.25.  
+> CNN 정리노트 1
 
-> 2017.07.25.
+<!-- @import "[TOC]" {cmd:"toc", depthFrom:1, depthTo:6, orderedList:false} -->
+<!-- code_chunk_output -->
+
+* [CNN의 역사](#cnn의-역사)
+* [기존 Multi-layer Neural Network의 문제점](#기존-multi-layer-neural-network의-문제점)
+* [왜 CNN 인가?](#왜-cnn-인가)
+	* [Receptive Field](#receptive-field)
+	* [Convolution 이란?](#convolution-이란)
+* [CNN의 특징](#cnn의-특징)
+	* [Locality](#locality)
+* [Hyper-parameters](#hyper-parameters)
+	* [Filter의 개수](#filter의-개수)
+	* [Filter의 형태](#filter의-형태)
+	* [Stride 값](#stride-값)
+	* [Zero-padding 지원 여부](#zero-padding-지원-여부)
+
+<!-- /code_chunk_output -->
+
+---
+
 
 ##  CNN의 역사
 
@@ -109,7 +131,7 @@ Stride는 convolution을 수행할 때, 건너 뛸 픽셀의 개수를 결정한
 
 Stride는 입력 영상의 크기가 큰 경우, 연산량을 줄이기 위한 목적으로 입력단과 가까운 쪽에만 적용을 한다.
 
-#### 그럼 stride를 1로 정하고, pooling을 적용하는 방식과 stride 값을 크게 하는 방식에는 어떤 차이가 있을까?
+> 그럼 stride를 1로 정하고, pooling을 적용하는 방식과 stride 값을 크게 하는 방식에는 어떤 차이가 있을까?
 
 Stride를 1로 하면, 경계가 아닌 모든 입력 영상에 대해 convolution 연산을 수행하고 pooling을 하면서 값을 선택적으로 고를 수가 있지만, stride를 크게 하면 그런 선택의 기회가 사라지게 된다.   
 
