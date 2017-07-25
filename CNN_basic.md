@@ -36,7 +36,7 @@ CNN 은 1989년 LeCun이 발표한 논문("Backpropagation applied to handwritte
 
 아래의 예를 보면, 왼쪽의 전체 이미지에서 노란색 부분이 현재 convolution이 일어나고 있는 영역이며, 빨간색 글자는 convolution의 kernel에 해당이 되고, 노란색 영역의 mask에 대해 연산을 수행하면, 결과는 오른쪽처럼 4가 나오며, 노란색 윈도우 영역을 오른쪽으로 1을 이동시켜 다시 결과를 구하면 3이 되며, 계속 이동을 시키면서 연산을 하면 최종적인 결과를 얻을 수 있다.
 
-![]("./images/Convolution.png")
+![](./images/Convolution.png)
 
 ## CNN의 특징
 
@@ -52,7 +52,7 @@ CNN은 recptive field와 유사하게 local 정보를 활용한다. 공간적으
 
  ## CNN 구조
 
- ![]("./images/CNN구조.png")
+ ![](./images/CNN구조.png)
 
  CNN의 과정은 크게 보면 다음과 같은 3단계 과정으로 이루어 진다.
 
@@ -64,14 +64,14 @@ CNN 처리 과정은 단순하게 분류기로 구성되있는 것이 아니라,
 특징 추출과 topology invariance를 얻기 위해 filter와 subsampling을 거치며, 보통 이 과정을 여러 번을 반복적으로 수행하여 local feature로부터 global feature를 얻어낸다.  
 분류기 단계는 학습을 통해 다양한 경우에 대응할 수 있도록 해주는 것이 목표이며, 기존 신경망과 동일한 구조를 갖는다.
 
- ![]("./images/subsampling.png")
+ ![](./images/subsampling.png)
 
  아래의 예에서 max-pooling을 선택하게 되면, 전체 subsampling 윈도우에서 가장 큰 값만 선택하기 때문에 우 상단에 있는 값처럼 결과가 나오고, average-sampling을 선택하면 각 window의 평균을 취하기 때문에 우 하단에 있는 결과가 나온다.  
 
 이동이나 변형 등에 무관한 학습 결과를 보이려면 좀 더 강하고 global한 특징을 추출해야 하는데, 이를 위해 통상적으로 (convolution + sub-sampling) 과정을 여러 번을 거치게 되면 좀 더 전체 이미지를 대표할 수 있는 global한 특징을 얻을 수 있게 된다.  
 이렇게 얻어진 특징을 fully-connected network을 통해 학습을 시키게 되면 2차원 영상 정보로부터 receptive field와 강한 신호 선택의 특성을 살려 topology 변화에 강인한 인식 능력을 갖게 된다
 
-![]("./images/LeNet1.png")
+![](./images/LeNet1.png)
 
 위 그림은 CNN의 구조를 성명하는 대표적인 그림 중 하나이다.
 
@@ -103,7 +103,7 @@ Feature map의 크기(즉, convolutional layer의 출력 영상의 크기)는 la
 
 Stride는 convolution을 수행할 때, 건너 뛸 픽셀의 개수를 결정한다. 쉽게 설명하기 위해, 1차원의 경우를 예를 들면 아래 그림과 같다.
 
-![]("./images/stride.png")
+![](./images/stride.png)
 
 위 그림처럼, stride는 건널 뛸 픽셀의 수를 나타내며, 2차원인 영상 데이터에 대해서는 가로 및 세로 방향으로 stride에서 정한 수만큼씩 건너 뛰면서  convolution을 사용한다.
 
@@ -121,7 +121,7 @@ Stride를 1로 하면, 경계가 아닌 모든 입력 영상에 대해 convoluti
 
 아래 그림은 유명한 LeCun의 논문에 나오는 CNN의 구조를 보여준다.
 
-![]("./images/LeNet5.png")
+![](./images/LeNet5.png)
 
 보통 convolution 연산을 하게 되면, 경계 처리문제로 인해 출력 영상인 feature map의 크기가 입력 영상보다 작아지게 된다.  
 zero-padding은 작아지는 것을 피하기 위해 입력의 경계면에 0을 추가하는 것을 말하며, FFT 등에서도 많이 사용이 된다.
