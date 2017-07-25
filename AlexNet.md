@@ -3,7 +3,19 @@ Convolutaion Neural Networks
 =====================================
 > 2017.07.25.  
 > CNN 정리노트 3
+<!-- TOC -->
 
+- [AlexNet](#alexnet)
+- [AlexNet 의 구조](#alexnet-의-구조)
+- [AlexNet 의 성능 개선을 위한 고려](#alexnet-의-성능-개선을-위한-고려)
+    - [ReLU](#relu)
+    - [Overlapped Pooling](#overlapped-pooling)
+    - [Local Response Normalization](#local-response-normalization)
+- [Overfitting에 대한 해결책](#overfitting에-대한-해결책)
+- [AlexNet에서의 GPU 활용](#alexnet에서의-gpu-활용)
+- [AlexNet - 결과](#alexnet---결과)
+
+<!-- /TOC -->
 ---
 
 ## AlexNet
