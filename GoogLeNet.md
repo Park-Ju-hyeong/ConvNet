@@ -120,3 +120,154 @@ l  Ops: 연산의 수를 나타낸다. 연산의 수는 feature-map의 수와 �
 
 
 위 설명에 따라 표에 있는 각각의 숫자들의 의미를 해석해 보면, GoogLeNet의 구조를 좀 더 친숙하게 이해할 수 있다.
+
+
+## AlexNwt과의 비교
+
+AlexNet과 GooglNet을 비교한 그림은 아래와 같다.
+
+놀라운 부분은 망의 깊이는 훨씬 깊은데 free parameter의 수는 1/12 수준이고 전체 연산량의 숫자도 AlexNet에 비해 적다는 것을 알 수 가 있다.  
+GoogleNet과 인셉션에 대한 설계 철학을 정확하게 이해하면 그 이유를 알 수 있다.
+
+![](./images/Deeper.png)
+
+
+## Auxiliary classifier
+
+아래 그림의 GoogLeNet 블락도를 보면 Auxiliary classifier라고 불리는 독특한 유닛이 있다.  
+
+![](./images/Auxiliary.png)  
+
+이전의 CNN구조에서는 볼 수 없었던 독특한 구조이다.
+
+망이 깊어지면서 생기는 큰 문제 중 하나는 vanishing gradient 문제이며,  이로 인해 학습 속도가 아주 느려지거나 overfitting 문제가 발생한다.  
+신경망에서는 최종 단의 error를 역전파(back-propagation)를 시키면서 파라미터 값을 갱신한다.  그런데 gradient 값들이 0 근처로 가게 되면, 학습 속도가 아주 느려지거나 파라미터의 변화가 별로 없어 학습 결과가 더 나빠지는 현상이 발생할 수 있다.  
+활성함수로 sigmoid함수를 쓰는 경우 그 특성항 일부 구간을 제외하면 미분값이 거의 0으로 수렴하기 때문에 출력 error의 크기와 상관없이 학습 속도가 느려진다. 또한 cross-entropy함수를 사용하면 좀 더 개선은 되지만 본질적인 문제가 해결이 되는 것은 아니다.  
+
+GoogLeNet에서는 이 문제를 극복하기 위해 Auxiliary classifier를 중간 2곳에 두었다. 학습할 때는 이 Auxiliary classifier를 이용하여 vanishing gradient문제를 피하고, 수렴을 더 좋게 해주면서 학습 결과가 좋게 된다.  
+
+이 Auxiliary classifier는 GoogLeNet 논문에 자세한 설명은 없지만, 이후 DNN을 연구하는 사람들이 이 구조에 대한 개선이나 이론적인 설명을 위한 논문을 발표 했으며, 대표적인 논문을 소개하면 다음과 같다.  
+
+> Deeply supervised nets (C.Y. Lee, S. Xie 등)
+> Training Deeper Convolutional Networks with Deep SuperVision(Liwei Wang, Chen-Yu Lee 등)  
+
+이 중 Liewi Wang의 논문이 좀더 Auxiliary classifier에 대한 설명을 하고 있으니, 니 논문을 참고하면 도움이 될 것 같다.  
+
+![](./images/Auxiliary2.png) 
+
+이 그림은 Liwei Wang의 논문에 나오는 실험용 DNN의 구조이며, X4 의 위치에 그들이 SuperVision이라고 부르는 Auxiliary classifier를 배치하고, back-propergation 시에 X4 위치에서 Auxiliary classifier와 최종 출력으로부터 정상적인 back-propergation 결과를 결합시킨다.  
+
+이렇게 되면, Auxiliary classifier의 back-propergation결과가 더해지기 때문에 X4 위치에서 gradient가 작아지는 문제를 피할 수 있다.  
+GoogLeNet에서는 어느 위치에 Auxiliary classifier를 놓을 것인지, 어떤 결과를 얻었는지 명확하게 밝히지 않았지만, Liwei연구팀은 초기 10 ~ 50번 정도의 iteration을 통해 gradient가 어떻게 움직이는지 확인을 하고, 그 위치에 Auxiliary classifier를 붙이는 것이 좋다고 논문에서 밝혔다.  
+
+이후 2015년 후반에 GoogLeNet의 첫번째 저자 Szegedy가 다시 발표한 논문 "Rethinking the inception Architecture for Computer Vision"에 다시 Auxiliary classifier에 대한 이야기가 잠깐 나오는데, 여기에 따르면, Auxiliary classifier가 "Regularizer"와 같은 역할을 하며, 최종 단의 Main classifier가 중간의 side branch에 있는 Auxiliary classifier 가 batch-normalize 되었거나 drop-out layer를 갖고 있으면 결과가 더 좋아진다는 언급이 있다.  
+
+학습이 끝나고, 학습된 DNN을 이용할 때는 Auxiliary classifier는 삭제한다. 즉 Auxiliary classifier는 학습을 도와주기 위한 도우미 역할만을 하고, 학습을 통해 결과를 얻게 되면, 본래의 역할을 다하기 때문에 제거한다.  
+
+
+
+## Factorizing Convolutions
+
+큰 필터 크기를 갖는 convolution커널을 인수 분해 하면, 작은 커널 여러 개로 구성된 deep network를 만들 수 있으며, 이렇게 되면 parameter의 수가 더 줄어들면서 망은 깊어지는 효과를 얻을 수 있다.  
+
+
+![](./images/Convolutions.png)
+
+위 그림은 5x5 convolution을 2 layer의 3x3 convolution으로 구현한 경우를 보여준다.  
+5x5 convolution은 3x3에 비해 더 넓은 영역에 걸쳐 특징을 한 번에 추출할 수 있지만, 25/9 = 2.78배 비싼 유닛이다.   
+
+이 5x5 convolution은 2단의 3x3 convolution을 사용해 구현이 가능하며, 이 경우 free parameter의 수는 (9+9) 로 5x5 convolution의 25와 비교하면 28% 만큼 절감이 가능하다. 아래 그림은 이 방식을 적용하여 원래의 Inception을 변형시킨 결과이다.  
+
+![](./images/Convolutions2.png)
+
+7x7 convolution의 경우도 위 경우와 마찬가지로 3단의 3x3 convolution으로 대응이 가능하며, 이 경우는 (9+9+9)=27 이 되어 49와 비교하여 45% 만큼 절감할 수 있다.  
+
+5x5나 7x7 convolution을 여러단의 3x3 convolution과 같이 symmetry를 유지하는 방식으로의 인수분해가 가능하지만, symmety를 유지 하지 않고 row 방향 혹은 column 방향으로 인수 분해 하는 것도 가능하다. 아래 그림은 3x3 convolution을 1x3 convolution과 3x1 convolution으로 분해한 것이다.  
+
+
+![](./images/Convolutions3.png)
+
+이렇게 되면, free parameter의 수는 (3+3)=6 이 되어, 9와 비교하면 33% 절감이 된다.  비슷하게 nxn convolution은 1xn 및 nx1로 분해가 가능하며, n이 클수록 파라미터 절감 효과가 커진다.  
+
+이것을 인셉션 구조에 표현을 하면 아래 그림과 같이 된다. 아래 그림에서 n=3 이면 앞에서 살펴본 인셉션 모듈과 동일한다.  
+
+![](./images/Convolutions4.png)
+
+큰 필터를 균일한 크기의 3x3 으로 표현하는 것은 VGGNet의 핵심 아이디어이며, 효과적으로 grid 크기를 줄이는 기술은 구글이 자신들의 인셉션 구조를 발전시킨 Inception-V2, Inception-V3의 핵심 아이디어가 된다.  
+
+## Convolution Neural Network
+
+통상적인 CNN의 구조를 보면, convolution layer 뒤에 pooling layer를 두고, feature-map의 grid(해상도) 크기를 줄이는 것이 일반적이었다.  
+하지만 Inception module을 보면 여러개의 convolution layer와 pooling layer가 나란히 있는 좀 독특한 모양을 볼 수 있다.  
+
+### 효과적으로 해상도(grid size)를 줄이는 방법
+
+앞에서도 이야기를 했듯이, grid 크리를 줄이는 대표적인 방법은 convolution을 수행할 때 stride를 1 이상의 값으로 설정하거나, pooling을 사용하는 것이다.  
+
+전형적인 CNN구조에서는 convolution layer를 이용하여, 이전 feature-map으로부터 의미 있는 특징을 추출하며, 이 때 convolution kermel의 개수는 숨어 있는 특징을 잘 추출할 수 있도록 충분한 수가 있어야 함은 물론이다. 그리고 다음 단에 오는 pooling layer를 이용해 feature-map의 크기를 줄이는 것이 일반적인 방식이다.  
+
+
+![](./images/Convolutions5.png)
+
+위 그림에서는 convolution 대신에 Inception으로 표시가 되어 있지만, 이것을 convolution이라고 생각을 해도 큰 차이가 없다.   
+35x35 크기의 320개 feature-map을 입력으로 하여 17x17 크기의 640개의 feature-map을 얻고자 한다. 위 방식 중 어느 쪽이 효과적으로 grid 크기를 줄이는 방식일 까?  
+
+
+먼저 왼쪽 방식은 35x35x320 feature-map에 먼저 pooling을 적용하여 크기를 절반으로 줄인다. 뒤에 Inception을 적용하여 17x17 크기의 640개 feature-map을 얻었다.  연상량 관점에서만 보면 이 방식이 효율적인 것처럼 보이지만, Pooling 단계를 거치면서 원래 feature-map에 있는 숨어 있는 정보(representation concept)가 사라지게 될 가능성이 있으므로 효율성 관점에서 보면 최적이라고 보기 어렵다.  
+반면에 오른쪽은 Inception module을 먼저 적용하여 64개의 feature-map을 얻은 후에 pooling을 적용하여 feature-map의 크기를 줄였다.  이 경우에는 큰 크기의 feature-map에 Inception을 적용하였기 때문에 연산량의 관점에서 보면, 결과적으로 4배가 많은 셈이 된다.  
+당연히 feature-map의 크기를 줄이기 전에 Inception을 적용하였기 때문에 숨은 특징을 더 잘 찾아낼 가능성은 높아진다.  
+
+그렇다면 좀 더 효과적으로 grid 크기를 줄이는 방법은 무엇일까?  
+
+Szededy(GoogLeNet 설계자 중 항 명)는 자신의 논문 "Rethinking the inception architecture for computer vision"에서 아래 그림과 같은 구조를 제안하였다.  
+
+
+![](./images/Convolutions6.png) 
+
+먼저 왼쪽은 구조가 Inception module과 비슷하다는 것을 발견할 수 있을 것이다. (다른 점이 있다면, 최종단에 stride 값을 "1"이 아니라 "2"로 적용했다는 점이다.)  
+Pooling layer 및 convolution layer를 나란하게 배치하고, 최종단에 stride 값을 "2"를 적용하게 되면, 결과적으로 5x5, 3x3 convolution을 통해 local feature를 추출하면서 stride 2를 통해 크기가 줄고, 또한 pooling layer를 통해서도 크기를 줄이고 그 걸과를 결합하는 방식이다.  
+
+오른쪽은 왼쪽보다는 좀 더 단순한 방법으로 stride 2ㄹㄹ 갖는 convolution을 통해 320개의 feature-map을 추출하고 pooling layer를 통해 다시 320개의 feature-map을 추출함으로써 효율성과 연상량의 절감을 동시에 달성할 수 있게 되었다.  
+
+## Inception-V2  
+
+2014년 ILSVRC를 참가할 당시에는 구글은 전년도 ZFNet의 결과보다 거의 2배 정도의 성능을 얻었기 때문에, 그리고 사람들이 식별할 수 있는 수준에 육박했기 때문에 Inception-V1 구조에 만족하였을 것 같다.  
+하지만, 불과 1년 후 2015 ILSVRC에서 마이크로소프트의 ResNet이 GoogLeNet결과보다 거의 2배 좋은 성능으로 우승을 한다. 그 결과 Inception-V2 및 V3가 되었으며, 하마 지금은 더 성능을 올리는 방법에 대한 체계적인 연구를 하고 있을 것으로 추정된다.  
+
+2014년에 발표한 VGGNet은 GoogLeNet과 거의 유사한 성능을 보이면서, 구조도 3x3 convolution만을 사용하는 단순한 구조로 유명하다. 여기에 많은 힌트를 얻을 것으로 보이며, colvolution kernel에 대한 인수분해를 통해 망은 더 깊어지게 되고, 효과적으로 연산량은 더 절감할 수 있게 된다.  
+
+18-layer의 VGGNet이 22-layer의 GoogLeNet보다 연산량이 3배 가량 많았기 때문에, 구글의 설계 철학과 맞지 않아 그들의 방식을 단순하게 따르지 않았고, 단지 인수분해의 개념만을 따왔다. 본래의 Inception module을 인수분해 방식을 사용하여 좀 더 개선하고, GoogLeNet 앞단에 있던 7x7 convolution등을 인수분해를 통해 작은 크기의 multi-layer 구조로 개선하였다.   
+아래 표는 Inception-V2의 layer 구조를 보여주는 표이다.  
+
+
+![](./images/Inception-V2.png)  
+
+2014년 GoogLeNet에서는 입력 이미지로 224x224x3 크기를 지원했지만,  2015년 Inception-V2 사용한 구조에서는 입력 이미지를 229x229x3의 크기를 지원할 수 있도록 하였다.  
+
+
+![](./images/inception2.png)  
+
+맨 앞 단은 stride 2값을 적용한 7x7 convolution 뒤에 max-pooling을 적용하여 이미지의 크기가 다시 1/4로 줄어들게 되어 56x56x64가 된다. 다음 단에서 1x1 convolution 및  3x3 convolution, max-pooling을 통해 인셉션 모듈의 입력으로는 28x28x192 크기가 적용이 된다.  
+
+하지만, Inception-V2를 적용한 2015년 구조에서는 7x7 convolution은 3개의 3x3 convolution으로 layer가 더 깊어지게 되었으며 Pooling을 통해 73x73x64 크기의 featuer-map이 얻어지게 된다.  
+
+다음은 3개의 convolution을 통해 최종적으로 35x35x228 이미지가 얻어지게 된다. 2014년 구조에서는 1x1 convolution, 3x3 convolution, max-pooling을 거쳤지만, 2015년 구조는 3개의 convolution으로 구현을 하였고, 중간 과정에 stride 2를 적용하여 pooling의 효과를 얻을 수 있도록 하였다.  
+
+다음 단에는 인셉션 모듈을 적용하는 것은 비슷하나, 맨 앞단의 인셉션 모듈의 개수가 2개에서 3개로 늘어났으며, 적용하는 인셉션 모듈의 구조도 위에서 살펴본 구조로 치환이 되어 망이 더 깊어지면서 연산량은 절감할 수 있게 되었다.  최종단의 구조도 2014년 구조와 비슷하기는 하지만 feature-map의 개수가 좀 더 많아졌다는 점이 다르다.  
+
+이런 구조 변화를 통해 22개의 layer를 갖던 2014년 구조에 비해, 총 42개의 layer로 깊러지게 되었지만, 연산량은 2.5배 늘어난 수준으로 여전히 높은 효율성을 보인다.  
+
+그 결과는 아래 표와 같다.  
+아래 표에서 GoogLeNet의 결과가 원래 결과보다 높게 보이는 이유는 data augmentation 기법을 적용하지 ㅇ낳고 single-crop을 했을 때의 결과이다.  
+
+아래 Inception-V2를 다양하게 적용했을 때의 결과이며, regulatization 효과를 극대화 시키기 위해 batch-normalized aucillaty classifier를 적용한면, 성능이 5.6%까지 좋아진다는 것을 확인할 수 있다.  
+
+![](./images/Inception-V22.png) 
+
+Multi-crop을 144개 까지 적용하고, Inception-V2의 성능을 더 극대화 시킨 Inception-V3 구조에서는 top-1 error율이 4.1 까지 떨어져 아주 우수한 성능을 보이게 된다.  
+
+---
+
+> 효과적으로 Grid size를 줄이는 방법을 살펴보았는데, 단순하게 pooling layer를 적용하는 것보다 convolution layer와 같이 나란히 적용하는 것이 효과적이라는 것을 파악하였다.  
+
+
