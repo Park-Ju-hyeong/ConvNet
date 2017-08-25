@@ -4,6 +4,21 @@ Convolutaion Neural Networks
 > 2017.07.25.  
 > CNN 정리노트 4
 
+<!-- TOC -->
+
+- [GoogLeNet](#googlenet)
+- [NIN(Network In Network) 구조와 설계 철학](#ninnetwork-in-network-구조와-설계-철학)
+- [1x1 Convolution이란?](#1x1-convolution이란)
+- [구글의 인셉션(Inception)](#구글의-인셉션inception)
+- [GoogleLeNet의 핵심 철학 및 구조](#googlelenet의-핵심-철학-및-구조)
+- [AlexNwt과의 비교](#alexnwt과의-비교)
+- [Auxiliary classifier](#auxiliary-classifier)
+- [Factorizing Convolutions](#factorizing-convolutions)
+- [Convolution Neural Network](#convolution-neural-network)
+    - [효과적으로 해상도(grid size)를 줄이는 방법](#효과적으로-해상도grid-size를-줄이는-방법)
+- [Inception-V2](#inception-v2)
+
+<!-- /TOC -->
 ---
 
 ## GoogLeNet
@@ -202,7 +217,7 @@ GoogLeNet에서는 어느 위치에 Auxiliary classifier를 놓을 것인지, �
 
 ### 효과적으로 해상도(grid size)를 줄이는 방법
 
-앞에서도 이야기를 했듯이, grid 크리를 줄이는 대표적인 방법은 convolution을 수행할 때 stride를 1 이상의 값으로 설정하거나, pooling을 사용하는 것이다.  
+앞에서도 이야기를 했듯이, grid 크기를 줄이는 대표적인 방법은 convolution을 수행할 때 stride를 1 이상의 값으로 설정하거나, pooling을 사용하는 것이다.  
 
 전형적인 CNN구조에서는 convolution layer를 이용하여, 이전 feature-map으로부터 의미 있는 특징을 추출하며, 이 때 convolution kermel의 개수는 숨어 있는 특징을 잘 추출할 수 있도록 충분한 수가 있어야 함은 물론이다. 그리고 다음 단에 오는 pooling layer를 이용해 feature-map의 크기를 줄이는 것이 일반적인 방식이다.  
 
@@ -258,13 +273,13 @@ Pooling layer 및 convolution layer를 나란하게 배치하고, 최종단에 s
 이런 구조 변화를 통해 22개의 layer를 갖던 2014년 구조에 비해, 총 42개의 layer로 깊러지게 되었지만, 연산량은 2.5배 늘어난 수준으로 여전히 높은 효율성을 보인다.  
 
 그 결과는 아래 표와 같다.  
-아래 표에서 GoogLeNet의 결과가 원래 결과보다 높게 보이는 이유는 data augmentation 기법을 적용하지 ㅇ낳고 single-crop을 했을 때의 결과이다.  
+아래 표에서 GoogLeNet의 결과가 원래 결과보다 높게 보이는 이유는 data augmentation 기법을 적용하지 않고 single-crop을 했을 때의 결과이다.  
 
 아래 Inception-V2를 다양하게 적용했을 때의 결과이며, regulatization 효과를 극대화 시키기 위해 batch-normalized aucillaty classifier를 적용한면, 성능이 5.6%까지 좋아진다는 것을 확인할 수 있다.  
 
 ![](./images/Inception-V22.png) 
 
-Multi-crop을 144개 까지 적용하고, Inception-V2의 성능을 더 극대화 시킨 Inception-V3 구조에서는 top-1 error율이 4.1 까지 떨어져 아주 우수한 성능을 보이게 된다.  
+Multi-crop을 144개 까지 적용하고, Inception-V2의 성능을 더 극대화 시킨 Inception-V3 구조에서는 top-5 error율이 4.1 까지 떨어져 아주 우수한 성능을 보이게 된다.  
 
 ---
 
