@@ -11,7 +11,11 @@
     * [AlexNet.ipynb - Tensorflow](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/AlexNet.ipynb)  
 4. [GoogLeNet.md](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/GoogLeNet.md)  
 
-5. [진행중. 2017.08.25.]
+5. [VGGNet.md](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/VGG.md)  
+
+6. [ResNet.md](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/ResNet.md)
+
+7. [진행중.]
     
 
 ## 요구되는

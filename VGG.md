@@ -4,7 +4,17 @@ Convolutaion Neural Networks
 > 2017.08.25.  
 > CNN 정리노트 5
 
-[Toc]
+<!-- TOC -->
+
+- [VGGNet](#vggnet)
+- [VGGNet에서 특이한 점](#vggnet에서-특이한-점)
+- [깊은 망](#깊은-망)
+- [VGGNet에서 성능을 높이기 위해 적용한 방법](#vggnet에서-성능을-높이기-위해-적용한-방법)
+    - [Traing](#traing)
+    - [Test](#test)
+- [VGGNet의 결과](#vggnet의-결과)
+
+<!-- /TOC -->
 ---
 
 2014년 ILSVRC에서 GoogLeNet과 함께 큰 주목을 받은 팀은 Oxford 대학의 VGGNet 팀이다. 아마 GoogLeNet이 없었다면 모든 영광을 차지할수도 있었겠지만, GoogLeNet에 근소한 차이로 뒤지며 2위를 차지한다.  

@@ -4,7 +4,16 @@ Convolutaion Neural Networks
 > 2017.08.25.  
 > CNN 정리노트 6
 
-[Toc]
+<!-- TOC -->
+
+- [ResNet](#resnet)
+- [ResNet 팀의 실험](#resnet-팀의-실험)
+    - [실험 결과](#실험-결과)
+    - [Deeper Bottleneck Architecture](#deeper-bottleneck-architecture)
+- [CIFAR](#cifar)
+- [진행중..](#진행중)
+
+<!-- /TOC -->
 ---
 
 
