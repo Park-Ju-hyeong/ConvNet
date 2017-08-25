@@ -286,3 +286,6 @@ Multi-crop을 144개 까지 적용하고, Inception-V2의 성능을 더 극대�
 > 효과적으로 Grid size를 줄이는 방법을 살펴보았는데, 단순하게 pooling layer를 적용하는 것보다 convolution layer와 같이 나란히 적용하는 것이 효과적이라는 것을 파악하였다.  
 
 
+<h2>Refernece </h2>  
+
+[라온피플 블로그](http://laonple.blog.me/220643128255)
