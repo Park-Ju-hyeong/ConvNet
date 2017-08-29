@@ -62,6 +62,8 @@ Result  |   Method  |   따라해보기
 * i=j=1 인 경우를 살펴보면, [1 x 2] 크기의 filter size를 갖게된다.  
 원소가 {1, 2}를 가지므로 [1 x 1], [1 x 2], [2 x 1], [2 x 2]의 filter size를 가질 수 있다. 
 
+<br>
+
 3. overlapping 이라는 옵션이 있는데, Pooling regions이 P_ij = [A_{i-1}, A_i] x [B_{j-1}, B_j] 가 되서 region의 우하단 부분이 겹치게 할 수도 있다.  
 CIFAR100 test의 경우 무조건 overlapping 이 좋은 결과가 나온다.
 * Conv[3x3 / str=1]을 생각하면 쉽다.  
@@ -71,7 +73,15 @@ CIFAR100 test의 경우 무조건 overlapping 이 좋은 결과가 나온다.
 
 ![](./images/FMP_pseudo.png)
 
-5. Fractional MP 예제코드
+[Fractional MP 예제코드](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/CIFAR/FractionalMP_.ipynb)
+
+<br>
+
+5. Francional Max-Pooling의 모형 구조는 다음과 같다. 
+`(32nC2 − FMP√2)5 − C2 − C1 − output`
+
+<br>
+
 ---
 
 ## 요구되는
