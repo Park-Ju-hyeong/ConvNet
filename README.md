@@ -10,6 +10,7 @@
 3. [AlexNet.md](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/AlexNet.md)  
     * [AlexNet.ipynb - Tensorflow](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/AlexNet.ipynb)  
 4. [GoogLeNet.md](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/GoogLeNet.md)  
+    * [Inception-v3 - Prettytensor](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/CIFAR-100%20%5Binception-v3%5D.ipynb)
 
 5. [VGGNet.md](https://github.com/Park-Ju-hyeong/ConvNet/blob/master/VGG.md)  
 
