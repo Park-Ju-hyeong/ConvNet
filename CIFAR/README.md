@@ -1,7 +1,6 @@
 # 해당 문서는
 
 `CIFAR` 데이터를 이용해한 Image Classification 을 공부하면서 만든 파일입니다.  
-AlexNet
 
 
 Result  |   Method  |   따라해보기    
